@@ -13,13 +13,17 @@
 
     <script>
         const sseDataContainer = document.getElementById('sse-data');
-        const eventSource = new EventSource('http://127.0.0.1:5000/stream'); // 连接到后端的 /stream 端点
+        // const eventSource = new EventSource('http://127.0.0.1:5000/stream'); // 连接到后端的 /stream 端点
+        const eventSource = new EventSource('http://127.0.0.1:5000/sse_stream'); // 连接到后端的 /stream 端点
+
+        let accumulatedData = ""; // 用于累积所有数据
 
         // 监听 message 事件 (默认事件类型)
         eventSource.onmessage = function(event) {
-            const newData = document.createElement('p');
-            newData.textContent = event.data; // event.data 包含服务器发送的数据
-            sseDataContainer.appendChild(newData);
+            // newData.textContent = event.data; // event.data 包含服务器发送的数据
+            // sseDataContainer.appendChild(newData);
+            accumulatedData += event.data; // 追加新数据，并添加换行符以便阅读
+            sseDataContainer.textContent = accumulatedData; // 更新容器的文本内容
             console.log('Received data:', event.data);
         };
 
@@ -27,7 +31,7 @@
         eventSource.onerror = function(error) {
             console.error('EventSource failed:', error);
             // 如果连接断开，可以考虑关闭 EventSource
-            // eventSource.close();
+            eventSource.close();
         };
 
         // 监听 open 事件 (可选)
@@ -36,9 +40,9 @@
         };
 
         // 如果服务器发送了自定义事件名 (例如 event: my_event), 你可以这样监听:
-        // eventSource.addEventListener('my_event', function(event) {
-        //     console.log('Received custom event:', event.data);
-        // });
+        eventSource.addEventListener('my_event', function(event) {
+            console.log('Received custom event:', event.data);
+        });
 
     </script>
 </body>
