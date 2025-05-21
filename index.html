@@ -29,7 +29,7 @@
 
         // 监听 error 事件 (可选)
         eventSource.onerror = function(error) {
-            console.error('EventSource failed:', error);
+            // console.error('EventSource failed:', error);
             // 如果连接断开，可以考虑关闭 EventSource
             eventSource.close();
         };

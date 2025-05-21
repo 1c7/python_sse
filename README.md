@@ -1,4 +1,6 @@
-# 教程：理解 Python FastAPI 的 StreamingResponse 以及前端 SSE 是怎么回事
+# 教程：演示 SSE 
+价值：用尽可能简短的代码，演示 SSE 在前后端是怎么写代码的。   
+后端用 FastAPI 的 StreamingResponse   
 
 ## 安装依赖
 ```
