@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SSE Client</title>
+</head>
+<body>
+    <h1>Server-Sent Events</h1>
+    <div id="sse-data">
+        <!-- 数据将显示在这里 -->
+    </div>
+
+    <script>
+        const sseDataContainer = document.getElementById('sse-data');
+        const eventSource = new EventSource('http://127.0.0.1:5000/stream'); // 连接到后端的 /stream 端点
+
+        // 监听 message 事件 (默认事件类型)
+        eventSource.onmessage = function(event) {
+            const newData = document.createElement('p');
+            newData.textContent = event.data; // event.data 包含服务器发送的数据
+            sseDataContainer.appendChild(newData);
+            console.log('Received data:', event.data);
+        };
+
+        // 监听 error 事件 (可选)
+        eventSource.onerror = function(error) {
+            console.error('EventSource failed:', error);
+            // 如果连接断开，可以考虑关闭 EventSource
+            // eventSource.close();
+        };
+
+        // 监听 open 事件 (可选)
+        eventSource.onopen = function() {
+            console.log('Connection to server opened.');
+        };
+
+        // 如果服务器发送了自定义事件名 (例如 event: my_event), 你可以这样监听:
+        // eventSource.addEventListener('my_event', function(event) {
+        //     console.log('Received custom event:', event.data);
+        // });
+
+    </script>
+</body>
+</html> 
