@@ -33,14 +33,9 @@ async def stream_data():
                              media_type="text/event-stream")
 
 
-
-# 要发送的长字符串
 LONG_STRING = "这是一段将会被一个字一个字发送到前端的示例文本... Hello from FastAPI SSE! "
 
 async def event_generator(request: Request):
-    """
-    异步生成器，逐字发送字符串
-    """
     for char in LONG_STRING:
         # 检查客户端是否仍然连接
         if await request.is_disconnected():
@@ -52,7 +47,6 @@ async def event_generator(request: Request):
     # （可选）发送一个特殊的结束事件
     yield "event: end\ndata: Transmission Complete\n\n"
     print("字符串发送完毕")
-
 
 @app.get("/sse_stream")
 async def sse_stream_endpoint(request: Request):

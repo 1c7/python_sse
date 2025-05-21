@@ -13,8 +13,8 @@
 
     <script>
         const sseDataContainer = document.getElementById('sse-data');
-        // const eventSource = new EventSource('http://127.0.0.1:5000/stream'); // 连接到后端的 /stream 端点
-        const eventSource = new EventSource('http://127.0.0.1:5000/sse_stream'); // 连接到后端的 /stream 端点
+        // const eventSource = new EventSource('http://127.0.0.1:5000/stream');
+        const eventSource = new EventSource('http://127.0.0.1:5000/sse_stream');
 
         let accumulatedData = ""; // 用于累积所有数据
 
