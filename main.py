@@ -22,6 +22,7 @@ app.add_middleware(
 )
 
 
+# 这个逻辑很简单，循环 10 次，每次间隔 0.5 秒，发送一个数据块
 async def fake_data_streamer():
     for i in range(10):
         yield f"data: data chunk {i}\n\n" # SSE 格式要求
@@ -32,10 +33,9 @@ async def stream_data():
     return StreamingResponse(fake_data_streamer(), 
                              media_type="text/event-stream")
 
-
-LONG_STRING = "这是一段将会被一个字一个字发送到前端的示例文本... Hello from FastAPI SSE! "
-
+# 这个是发一段长文本，以及发送结束事件
 async def event_generator(request: Request):
+    LONG_STRING = "这是一段长文本，会被一个字一个字发送到前端... Hello from FastAPI SSE! "
     for char in LONG_STRING:
         # 检查客户端是否仍然连接
         if await request.is_disconnected():
@@ -44,7 +44,8 @@ async def event_generator(request: Request):
         # SSE 消息格式: "data: <your_data>\n\n"
         yield f"data: {char}\n\n"
         await asyncio.sleep(0.2) # 模拟一些处理时间或网络延迟，让效果更明显
-    # （可选）发送一个特殊的结束事件
+    
+    # （可选）最后发送一个特殊的结束事件，表示数据传输完成
     yield "event: end\ndata: Transmission Complete\n\n"
     print("字符串发送完毕")
 
